@@ -12,9 +12,12 @@ Class-based views
 Including another URLconf
     1. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import include, url
-from django.contrib import admin
+from django.conf.urls import include, url, patterns
+# Uncomment the next two lines to enable admin
+# from django.contrib import admin
+# admin.autodiscover()
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+    # url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', 'lists.views.home_page', name='home')
 ]
