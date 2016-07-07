@@ -6,13 +6,6 @@ from django.template.loader import render_to_string
 from lists.views import home_page
 from lists.models import Item
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
-
 
 class HomePageTest(TestCase):
     def test_home_page_returns_correct_html(self):
@@ -38,7 +31,7 @@ class HomePageTest(TestCase):
         request.POST['item_text'] = 'A new list item'
 
         response = home_page(request)
-        
+
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], '/')
 
@@ -50,6 +43,16 @@ class HomePageTest(TestCase):
         request = HttpRequest()
         home_page(request)
         self.assertEqual(Item.objects.count(), 0)
+
+    def test_home_page_displays_all_list_items(self):
+        Item.objects.create(text='itemey 1')
+        Item.objects.create(text='itemey 2')
+
+        request = HttpRequest()
+        response = home_page(request)
+
+        self.assertIn('itemey 1', response.content.decode())
+        self.assertIn('itemey 2', response.content.decode())
 
 class ItemModelTest(TestCase):
     def test_saving_and_retrieving_items(self):
